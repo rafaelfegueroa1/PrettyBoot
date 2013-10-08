@@ -27,23 +27,27 @@ class Server extends Eloquent
         return true;
     }
 
+    // Get server status
     public function getStatus()
     {
         $result = @get_headers($this->url);
-        if($result[0] == 'HTTP/1.1 200 OK') return true;
+        if(isset($result[0]) && $result[0] == 'HTTP/1.1 200 OK') return true;
         return false;
     }
 
+    // Get server status and include markup
     public function getStatusMarkup()
     {
         $result = @get_headers($this->url);
-        if($result[0] == 'HTTP/1.1 200 OK')
+
+        if(isset($result[0]) && $result[0] == 'HTTP/1.1 200 OK')
         {
             return '<span style="color:#00ab00; text-shadow:0px 0px 1px #111;">Online</span>';
         }
         return '<span style="color:red;">Offline</span>';
     }
 
+    // Count online servers
     public static function getOnline()
     {
         $cnt = 0;
@@ -51,7 +55,7 @@ class Server extends Eloquent
         {
             $url = $s->url;
             $result = @get_headers($url);
-            if($result[0] == 'HTTP/1.1 200 OK') $cnt++;
+            if(isset($result[0]) && $result[0] == 'HTTP/1.1 200 OK') $cnt++;
         }
         return $cnt;
     }
